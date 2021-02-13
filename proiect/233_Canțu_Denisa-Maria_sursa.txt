@@ -1,0 +1,1040 @@
+--ex4
+
+CREATE TABLE clinic (
+    clinic_id      INT PRIMARY KEY,
+    name           VARCHAR(30) NOT NULL,
+    address        VARCHAR(60) NOT NULL,
+    city           VARCHAR(15) NOT NULL,
+    phone_number   VARCHAR(15) NOT NULL,
+    email          VARCHAR(25)
+);
+
+CREATE TABLE doctor (
+    doctor_id      INT PRIMARY KEY,
+    first_name     VARCHAR(15) NOT NULL,
+    last_name      VARCHAR(15) NOT NULL,
+    address        VARCHAR(60),
+    phone_number   VARCHAR(15) NOT NULL,
+    email          VARCHAR(40)
+);
+
+CREATE TABLE works_on (
+    clinic_id   INT,
+    doctor_id   INT,
+    CONSTRAINT clinic_doctor_pk PRIMARY KEY ( clinic_id, doctor_id ),
+    FOREIGN KEY ( clinic_id )   REFERENCES clinic ( clinic_id ),
+    FOREIGN KEY ( doctor_id )   REFERENCES doctor ( doctor_id )
+);
+
+CREATE TABLE specialization (
+    specialization_id   INT PRIMARY KEY,
+    name                VARCHAR(40) NOT NULL UNIQUE,
+    price               NUMBER(5)
+);
+
+CREATE TABLE has_specialization (
+    doctor_id           INT,
+    specialization_id   INT,
+    CONSTRAINT doctor_specialization_pk PRIMARY KEY ( doctor_id, specialization_id ),
+    FOREIGN KEY ( specialization_id )   REFERENCES specialization ( specialization_id ),
+    FOREIGN KEY ( doctor_id )           REFERENCES doctor ( doctor_id )
+);
+
+CREATE TABLE patient (
+    patient_id     NUMBER(4) PRIMARY KEY,
+    first_name     VARCHAR(15) NOT NULL,
+    last_name      VARCHAR(15) NOT NULL,
+    address        VARCHAR(60),
+    phone_number   VARCHAR(15) NOT NULL,
+    email          VARCHAR(25),
+    age            NUMBER(3) CHECK ( age > 0 )
+);
+
+CREATE TABLE diagnostic (
+    diagnostic_id   INT PRIMARY KEY,
+    name            VARCHAR(20) NOT NULL UNIQUE
+);
+
+CREATE TABLE consultation (
+    consultation_id     NUMBER(4) PRIMARY KEY,
+    doctor_id           NUMBER(4),
+    patient_id          NUMBER(4),
+    clinic_id           NUMBER(4),
+    diagnostic_id       NUMBER(4),
+    consultation_date   DATE NOT NULL,
+    FOREIGN KEY ( doctor_id )     REFERENCES doctor ( doctor_id ),
+    FOREIGN KEY ( patient_id )    REFERENCES patient ( patient_id ),
+    FOREIGN KEY ( clinic_id )     REFERENCES clinic ( clinic_id ),
+    FOREIGN KEY ( diagnostic_id ) REFERENCES diagnostic ( diagnostic_id )
+);
+  
+
+
+  CREATE SEQUENCE sec_specialization
+    start with 1
+    increment by 1
+    minvalue 1
+    maxvalue 9999
+    cycle;
+   
+    CREATE SEQUENCE sec_doctor
+    start with 1
+    increment by 1
+    minvalue 1
+    maxvalue 9999
+    cycle;
+    
+    CREATE SEQUENCE sec_clinic
+    start with 1
+    increment by 1
+    minvalue 1
+    maxvalue 9999
+    cycle;
+    
+    CREATE SEQUENCE sec_consultation
+    start with 1
+    increment by 1
+    minvalue 1
+    maxvalue 9999
+    cycle;
+    
+    CREATE SEQUENCE sec_patient
+    start with 1
+    increment by 1
+    minvalue 1
+    maxvalue 9999
+    cycle;
+    
+    CREATE SEQUENCE sec_diagnostic
+    start with 1
+    increment by 1
+    minvalue 1
+    maxvalue 9999
+    cycle;
+    
+
+--ex5
+
+    --into specialization
+    
+    INSERT INTO specialization (specialization_id, name, price )
+    VALUES (sec_specialization.nextval, 'Alergologie', 180);
+    
+    INSERT INTO specialization (specialization_id, name, price )
+    VALUES (sec_specialization.nextval, 'Dermatologie', 200);
+    
+    INSERT INTO specialization (specialization_id, name, price )
+    VALUES (sec_specialization.nextval, 'Cardiologie', 200);
+    
+    INSERT INTO specialization (specialization_id, name, price )
+    VALUES (sec_specialization.nextval, 'Medicina Interna', 320);
+    
+    INSERT INTO specialization (specialization_id, name, price )
+    VALUES (sec_specialization.nextval, 'Stomatologie', 300);
+    
+    INSERT INTO specialization (specialization_id, name, price )
+    VALUES (sec_specialization.nextval, 'Oftalmologie', 190);
+    
+    INSERT INTO specialization (specialization_id, name, price )
+    VALUES (sec_specialization.nextval, 'Pediatrie', 240);
+    
+    INSERT INTO specialization (specialization_id, name, price )
+    VALUES (sec_specialization.nextval, 'O.R.L.', 270);
+    
+    INSERT INTO specialization (specialization_id, name, price )
+    VALUES (sec_specialization.nextval, 'Psihiatrie', 350);
+    
+    INSERT INTO specialization (specialization_id, name, price )
+    VALUES (sec_specialization.nextval, 'Endocrinologie', 250);
+    
+    INSERT INTO specialization (specialization_id, name, price )
+    VALUES (sec_specialization.nextval, 'Imunologie', 250);
+    
+     INSERT INTO specialization (specialization_id, name, price )
+    VALUES (sec_specialization.nextval, 'Neurologie', 150);
+  
+   --into doctor
+   
+    INSERT INTO doctor (doctor_id, first_name, last_name, address, phone_number , email)
+    VALUES (sec_doctor.nextval, 'Elena', 'Popescu', 'Calea Moine?ti nr 12', '0723764839', 'elena.popescu@gmail.com'); 
+   
+    INSERT INTO doctor (doctor_id, first_name, last_name, address, phone_number , email)
+    VALUES (sec_doctor.nextval, 'Maria', 'Barsan', 'Calea Romanului nr 8', '0734512396', 'maria.barsan@gmail.com' ); 
+    
+    INSERT INTO doctor (doctor_id, first_name, last_name, address, phone_number , email)
+    VALUES (sec_doctor.nextval, 'Ana', 'Trefas', 'Strada 13 Septembrie nr 5', '0537445890', 'ana.trefas@gmail.com'); 
+    
+    INSERT INTO doctor (doctor_id, first_name, last_name, address, phone_number , email)
+    VALUES (sec_doctor.nextval, 'Razvan', 'Pavel', 'Strada 7 Noiembrie nr 2', '0546789675', 'razvan.pavel@gmail.com'); 
+    
+    INSERT INTO doctor (doctor_id, first_name, last_name, address, phone_number , email)
+    VALUES (sec_doctor.nextval, 'Marian', 'Ionescu', 'Strada Alecu Russo nr 4', '0823458298', 'marian.ionescu@gmail.com'); 
+    
+    INSERT INTO doctor (doctor_id, first_name, last_name, address, phone_number , email)
+    VALUES (sec_doctor.nextval, 'Monica', 'Balaita', 'Strada Aprodu Purice nr 34', '0645783456', 'monica.balaita@gmail.com'); 
+    
+    INSERT INTO doctor (doctor_id, first_name, last_name, address, phone_number , email)
+    VALUES (sec_doctor.nextval, 'Mariana', 'Marinov', 'Strada Barajului 34', '0983574757', null); 
+    
+    INSERT INTO doctor (doctor_id, first_name, last_name, address, phone_number , email)
+    VALUES (sec_doctor.nextval, 'Daniel', 'Andrei', 'Strada Brându?ei 5', '0957473222', 'daniel.andrei@gmail.com'); 
+    
+    INSERT INTO doctor (doctor_id, first_name, last_name, address, phone_number , email)
+    VALUES (sec_doctor.nextval, 'Andrei', 'Popa', null, '0937451823', 'andrei.popa@gmail.com'); 
+    
+    INSERT INTO doctor (doctor_id, first_name, last_name, address, phone_number , email)
+    VALUES (sec_doctor.nextval, 'Adrian', 'Gavriliu', 'Strada Caraiman 7', '0334562847', 'adrian.gavriliu@gmail.com'); 
+    
+    INSERT INTO doctor (doctor_id, first_name, last_name, address, phone_number , email)
+    VALUES (sec_doctor.nextval, 'Maria', 'Balaban', 'Strada Corbului 3', '0645372981', 'maria.balaban@gmail.com'); 
+    
+    INSERT INTO doctor (doctor_id, first_name, last_name, address, phone_number , email)
+    VALUES (sec_doctor.nextval, 'Alexandra', 'Botezatu', null, '0432567834', 'alexandra.botezatu@gmail.com'); 
+    
+    INSERT INTO doctor (doctor_id, first_name, last_name, address, phone_number , email)
+    VALUES (sec_doctor.nextval, 'Bianca', 'Popa', 'Strada Dobrogei 5', '0323452333', null); 
+    
+    INSERT INTO doctor (doctor_id, first_name, last_name, address, phone_number , email)
+    VALUES (sec_doctor.nextval, 'Andreea', 'Benchea', 'Strada Fagului 67', '0875628673', 'andreea.benchea@gmail.com'); 
+    
+    INSERT INTO doctor (doctor_id, first_name, last_name, address, phone_number , email)
+    VALUES (sec_doctor.nextval, 'Mariana', 'Cadar', null, '0936457845', 'mariana.cadar@gmail.com'); 
+    
+    INSERT INTO doctor (doctor_id, first_name, last_name, address, phone_number , email)
+    VALUES (sec_doctor.nextval, 'Mirela', 'Popescu', null, '0434368553', 'mirela.popescu@gmail.com'); 
+    
+    INSERT INTO doctor (doctor_id, first_name, last_name, address, phone_number , email)
+    VALUES (sec_doctor.nextval, 'Tudor', 'Silion', null, '0537898777', 'tudor.silion@gmail.com'); 
+    
+    INSERT INTO doctor (doctor_id, first_name, last_name, address, phone_number , email)
+    VALUES (sec_doctor.nextval, 'Ioan', 'Arama', 'Strada Gloriei 54', '0433235655', null); 
+    
+    INSERT INTO doctor (doctor_id, first_name, last_name, address, phone_number , email)
+    VALUES (sec_doctor.nextval, 'Ioana', 'Zidaru', 'Strada Iasomiei 34', '0789435356', 'ioana.zidaru@gmail.com'); 
+    
+    INSERT INTO doctor (doctor_id, first_name, last_name, address, phone_number , email)
+    VALUES (sec_doctor.nextval, 'Giulia', 'Caragea', 'Strada Livezilor 21', '0454578654', null); 
+    
+     
+   
+    --into diagnostic
+    
+    
+      INSERT INTO diagnostic (diagnostic_id, name)
+      VALUES (sec_diagnostic.nextval, 'Astm alergic');
+      
+      INSERT INTO diagnostic (diagnostic_id, name)
+      VALUES (sec_diagnostic.nextval, 'Rinita alergica'); 
+      
+      INSERT INTO diagnostic (diagnostic_id, name)
+      VALUES (sec_diagnostic.nextval, 'Acnee'); 
+      
+      INSERT INTO diagnostic (diagnostic_id, name)
+      VALUES (sec_diagnostic.nextval, 'Rozacee'); 
+      
+      INSERT INTO diagnostic (diagnostic_id, name)
+      VALUES (sec_diagnostic.nextval, 'Hipertensiune'); 
+      
+      INSERT INTO diagnostic (diagnostic_id, name)
+      VALUES (sec_diagnostic.nextval, 'Hepatita'); 
+      
+      INSERT INTO diagnostic (diagnostic_id, name)
+      VALUES (sec_diagnostic.nextval, 'Gastrita'); 
+      
+      INSERT INTO diagnostic (diagnostic_id, name)
+      VALUES (sec_diagnostic.nextval, 'Afectiune digestiva'); 
+      
+      INSERT INTO diagnostic (diagnostic_id, name)
+      VALUES (sec_diagnostic.nextval, 'Gingivita'); 
+      
+      INSERT INTO diagnostic (diagnostic_id, name)
+      VALUES (sec_diagnostic.nextval, 'Alzheimer'); 
+      
+      INSERT INTO diagnostic (diagnostic_id, name)
+      VALUES (sec_diagnostic.nextval, 'Amnezie'); 
+      
+      INSERT INTO diagnostic (diagnostic_id, name)
+      VALUES (sec_diagnostic.nextval, 'Cataracta'); 
+      
+      INSERT INTO diagnostic (diagnostic_id, name)
+      VALUES (sec_diagnostic.nextval, 'Depresie'); 
+      
+      INSERT INTO diagnostic (diagnostic_id, name)
+      VALUES (sec_diagnostic.nextval, ' Schizofrenie '); 
+      
+      INSERT INTO diagnostic (diagnostic_id, name)
+      VALUES (sec_diagnostic.nextval, 'Hipotiroidism '); 
+      
+      
+    --into patient
+    
+      INSERT INTO patient (patient_id, first_name, last_name, address, phone_number , email, age)
+      VALUES (sec_patient.nextval, 'Monica', 'Popescu', 'Strada Ia?ilor 98', '0676742345', null, 34); 
+    
+      INSERT INTO patient (patient_id, first_name, last_name, address, phone_number , email, age)
+      VALUES (sec_patient.nextval, 'Andreea', 'Ionescu', 'Strada Izvoare 7', '0875463758', 'andreea.ionescu@gmail.com', 65); 
+    
+      INSERT INTO patient (patient_id, first_name, last_name, address, phone_number , email, age)
+      VALUES (sec_patient.nextval, 'Irina', 'Popa', 'Strada Lunei 5', '0836574658', null, 78); 
+    
+      INSERT INTO patient (patient_id, first_name, last_name, address, phone_number , email, age)
+      VALUES (sec_patient.nextval, 'Paul', 'Solomon', null, '0847572348', 'paul.solomon@gmail.com' , 14); 
+    
+      INSERT INTO patient (patient_id, first_name, last_name, address, phone_number , email, age)
+      VALUES (sec_patient.nextval, 'Emanuel', 'Adam', 'Strada Milcov 32', '0965743788', 'emanuel.adam@gmail.com', 23); 
+    
+      INSERT INTO patient (patient_id, first_name, last_name, address, phone_number , email, age)
+      VALUES (sec_patient.nextval, 'Ioan', 'Dinca', 'Strada Morii 53', '0846468576', null, 45); 
+    
+      INSERT INTO patient (patient_id, first_name, last_name, address, phone_number , email, age)
+      VALUES (sec_patient.nextval, 'Daniel', 'Budau', 'Strada Orizontului 6', '0893543456', 'daniel.budau@gmail.com', 32); 
+    
+      INSERT INTO patient (patient_id, first_name, last_name, address, phone_number , email, age)
+      VALUES (sec_patient.nextval, 'Alin', 'Damian', null, '0645486989', 'alin.damian@gmail.com', 29); 
+    
+      INSERT INTO patient (patient_id, first_name, last_name, address, phone_number , email, age)
+      VALUES (sec_patient.nextval, 'Alexandru', 'Apostol', 'Strada Prieteniei 95', '0237845671', 'alex.apostol@gmail.com', 54); 
+    
+   
+    --into clinic
+    
+    INSERT INTO clinic (clinic_id, name, address, city, phone_number , email)
+    VALUES (sec_clinic.nextval, 'Mayo Clinic', 'Str Lalelelor 24','Cluj', '0567143567', 'mayoclinic@gmail.com'); 
+    
+    INSERT INTO clinic (clinic_id, name, address, city, phone_number , email)
+    VALUES (sec_clinic.nextval, 'One Medical', 'Stefan cel Mare 12','Cluj', '0235472548', 'onemedical@gmail.com'); 
+     
+    INSERT INTO clinic (clinic_id, name, address, city, phone_number , email)
+    VALUES (sec_clinic.nextval, 'Medlife', 'Str Mihai Viteazul 2', 'Bucuresti','0943769293', 'medlife@gmail.com'); 
+     
+    INSERT INTO clinic (clinic_id, name, address, city, phone_number , email)
+    VALUES (sec_clinic.nextval, 'Family Medical', 'Str Aviatorilor nr 14 ','Bucuresti', '05739485932', 'familymedical@gmail.com'); 
+     
+    INSERT INTO clinic (clinic_id, name, address, city, phone_number , email)
+    VALUES (sec_clinic.nextval, 'Uni Clinic', 'Str Castanilor 51', 'Bucuresti','0237433371', 'uniclinic@gmail.com');
+     
+    INSERT INTO clinic (clinic_id, name, address, city, phone_number , email)
+    VALUES (sec_clinic.nextval, 'Uni Clinic', 'Str Eroilor 4', 'Sibiu','0437642847', 'uniclinic_sibiu@gmail.com');
+     
+    INSERT INTO clinic (clinic_id, name, address, city, phone_number , email)
+    VALUES (sec_clinic.nextval, 'Clinica', 'Str Florilor 8', 'Sibiu','0478684777', 'clinica@gmail.com');
+     
+  
+     --into works_on
+     
+      INSERT INTO works_on (clinic_id, doctor_id)
+      VALUES (1,1); 
+      
+      INSERT INTO works_on (clinic_id, doctor_id)
+      VALUES (1,2);
+      
+      INSERT INTO works_on (clinic_id, doctor_id)
+      VALUES (1,3); 
+      
+      INSERT INTO works_on (clinic_id, doctor_id)
+      VALUES (1,4); 
+      
+      INSERT INTO works_on (clinic_id, doctor_id)
+      VALUES (1,5); 
+      
+      INSERT INTO works_on (clinic_id, doctor_id)
+      VALUES (1,6); 
+      
+      INSERT INTO works_on (clinic_id, doctor_id)
+      VALUES (2,4); 
+      
+      INSERT INTO works_on (clinic_id, doctor_id)
+      VALUES (2,7); 
+      
+      INSERT INTO works_on (clinic_id, doctor_id)
+      VALUES (2,8); 
+      
+      INSERT INTO works_on (clinic_id, doctor_id)
+      VALUES (2,9); 
+      
+      INSERT INTO works_on (clinic_id, doctor_id)
+      VALUES (2,5); 
+      
+      INSERT INTO works_on (clinic_id, doctor_id)
+      VALUES (2,6); 
+      
+      INSERT INTO works_on (clinic_id, doctor_id)
+      VALUES (3,10); 
+      
+      INSERT INTO works_on (clinic_id, doctor_id)
+      VALUES (3,11);
+      
+      INSERT INTO works_on (clinic_id, doctor_id)
+      VALUES (3,12); 
+      
+      INSERT INTO works_on (clinic_id, doctor_id)
+      VALUES (3,13); 
+      
+      INSERT INTO works_on (clinic_id, doctor_id)
+      VALUES (3,14); 
+      
+      INSERT INTO works_on (clinic_id, doctor_id)
+      VALUES (3,15); 
+      
+      INSERT INTO works_on (clinic_id, doctor_id)
+      VALUES (4,11); 
+      
+      INSERT INTO works_on (clinic_id, doctor_id)
+      VALUES (4,14); 
+      
+      INSERT INTO works_on (clinic_id, doctor_id)
+      VALUES (4,15); 
+      
+      INSERT INTO works_on (clinic_id, doctor_id)
+      VALUES (4,16); 
+      
+      INSERT INTO works_on (clinic_id, doctor_id)
+      VALUES (4,17); 
+      
+      INSERT INTO works_on (clinic_id, doctor_id)
+      VALUES (5,18); 
+      
+      INSERT INTO works_on (clinic_id, doctor_id)
+      VALUES (5,19); 
+      
+      INSERT INTO works_on (clinic_id, doctor_id)
+      VALUES (5,20); 
+       
+      INSERT INTO works_on (clinic_id, doctor_id)
+      VALUES (5,10); 
+      
+      INSERT INTO works_on (clinic_id, doctor_id)
+      VALUES (5,13); 
+    
+      
+ --into has_specialization
+     
+      INSERT INTO has_specialization (doctor_id, specialization_id)
+      VALUES (1, 3); 
+      
+      INSERT INTO has_specialization (doctor_id, specialization_id)
+      VALUES (1, 4); 
+      
+      INSERT INTO has_specialization (doctor_id, specialization_id)
+      VALUES (2, 2); 
+      
+      INSERT INTO has_specialization (doctor_id, specialization_id)
+      VALUES (3, 1); 
+      
+      INSERT INTO has_specialization (doctor_id, specialization_id)
+      VALUES (4, 6); 
+      
+      INSERT INTO has_specialization (doctor_id, specialization_id)
+      VALUES (4, 8); 
+      
+      INSERT INTO has_specialization (doctor_id, specialization_id)
+      VALUES (5, 10); 
+      
+      INSERT INTO has_specialization (doctor_id, specialization_id)
+      VALUES (6, 11); 
+      
+      INSERT INTO has_specialization (doctor_id, specialization_id)
+      VALUES (7, 3); 
+      
+      INSERT INTO has_specialization (doctor_id, specialization_id)
+      VALUES (8, 2); 
+      
+      INSERT INTO has_specialization (doctor_id, specialization_id)
+      VALUES (9, 4); 
+      
+      INSERT INTO has_specialization (doctor_id, specialization_id)
+      VALUES (10, 3); 
+      
+      INSERT INTO has_specialization (doctor_id, specialization_id)
+      VALUES (10, 4); 
+      
+      INSERT INTO has_specialization (doctor_id, specialization_id)
+      VALUES (11, 10); 
+      
+      INSERT INTO has_specialization (doctor_id, specialization_id)
+      VALUES (12, 2); 
+      
+      INSERT INTO has_specialization (doctor_id, specialization_id)
+      VALUES (13, 6); 
+      
+      INSERT INTO has_specialization (doctor_id, specialization_id)
+      VALUES (14, 8); 
+      
+      INSERT INTO has_specialization (doctor_id, specialization_id)
+      VALUES (15, 11); 
+      
+      INSERT INTO has_specialization (doctor_id, specialization_id)
+      VALUES (15, 1); 
+      
+      INSERT INTO has_specialization (doctor_id, specialization_id)
+      VALUES (16, 3); 
+      
+      INSERT INTO has_specialization (doctor_id, specialization_id)
+      VALUES (16, 4); 
+      
+      INSERT INTO has_specialization (doctor_id, specialization_id)
+      VALUES (17, 5); 
+      
+      INSERT INTO has_specialization (doctor_id, specialization_id)
+      VALUES (18, 7); 
+      
+      INSERT INTO has_specialization (doctor_id, specialization_id)
+      VALUES (19, 9); 
+      
+      INSERT INTO has_specialization (doctor_id, specialization_id)
+      VALUES (19, 12); 
+      
+      INSERT INTO has_specialization (doctor_id, specialization_id)
+      VALUES (20, 10); 
+      
+    
+    --into consultation
+        
+      INSERT INTO consultation (consultation_id, doctor_id, patient_id, clinic_id, diagnostic_id, consultation_date)
+      VALUES (SEC_CONSULTATION.nextval, 1, 1, 1, 5, '02/03/2020 11:40:00'); 
+        
+      INSERT INTO consultation (consultation_id, doctor_id, patient_id, clinic_id, diagnostic_id, consultation_date)
+      VALUES (SEC_CONSULTATION.nextval, 2, 2, 1, 3, '07/05/2020 10:30:00'); 
+        
+      INSERT INTO consultation (consultation_id, doctor_id, patient_id, clinic_id, diagnostic_id, consultation_date)
+      VALUES (SEC_CONSULTATION.nextval, 4, 1, 1, 11, '09/03/2020 12:00:00'); 
+        
+      INSERT INTO consultation (consultation_id, doctor_id, patient_id, clinic_id, diagnostic_id, consultation_date)
+      VALUES (SEC_CONSULTATION.nextval, 3, 2, 1, 2, '03/04/2020 13:20:00'); 
+      
+        
+      INSERT INTO consultation (consultation_id, doctor_id, patient_id, clinic_id, diagnostic_id, consultation_date)
+      VALUES (SEC_CONSULTATION.nextval, 8, 4, 2, 4, '02/06/2020 14:40:00'); 
+        
+      INSERT INTO consultation (consultation_id, doctor_id, patient_id, clinic_id, diagnostic_id, consultation_date)
+      VALUES (SEC_CONSULTATION.nextval, 9, 3, 2, 7, '02/07/2020 12:50:00'); 
+      
+      
+      INSERT INTO consultation (consultation_id, doctor_id, patient_id, clinic_id, diagnostic_id, consultation_date)
+      VALUES (SEC_CONSULTATION.nextval, 10, 5, 3, 6, '04/04/2020 11:15:00'); 
+        
+      INSERT INTO consultation (consultation_id, doctor_id, patient_id, clinic_id, diagnostic_id, consultation_date)
+      VALUES (SEC_CONSULTATION.nextval, 15, 6, 3, 1, '08/04/2020 10:35:00'); 
+      
+      
+      INSERT INTO consultation (consultation_id, doctor_id, patient_id, clinic_id, diagnostic_id, consultation_date)
+      VALUES (SEC_CONSULTATION.nextval, 17, 7, 4, 9, '09/19/2020 10:30:00'); 
+        
+      INSERT INTO consultation (consultation_id, doctor_id, patient_id, clinic_id, diagnostic_id, consultation_date)
+      VALUES (SEC_CONSULTATION.nextval, 11, 6, 4, 15, '09/04/2020 12:20:00'); 
+      
+        
+      INSERT INTO consultation (consultation_id, doctor_id, patient_id, clinic_id, diagnostic_id, consultation_date)
+      VALUES (SEC_CONSULTATION.nextval, 19, 8, 5, 13, '05/14/2020 17:00:00'); 
+      
+      INSERT INTO consultation (consultation_id, doctor_id, patient_id, clinic_id, diagnostic_id, consultation_date)
+      VALUES (SEC_CONSULTATION.nextval, 10, 9, 5, 8, '09/20/2020 15:30:00'); 
+      
+     
+    --ex 6
+--afisati toate specializarile cu pretul cuprins intre x si y
+CREATE OR REPLACE PROCEDURE specializations_price (
+    x   NUMBER,
+    y   NUMBER
+) IS
+    TYPE index_table IS
+        TABLE OF VARCHAR2(40) INDEX BY PLS_INTEGER;
+    v_specializations index_table;
+    v_exception EXCEPTION;
+BEGIN
+    SELECT name
+    BULK COLLECT
+    INTO v_specializations
+    FROM specialization
+    WHERE price <= y AND price >= x;
+
+    IF v_specializations.count = 0 THEN
+        RAISE v_exception;
+    END IF;
+     dbms_output.put_line('Specializarile sunt:');
+     
+    FOR i IN v_specializations.first..v_specializations.last LOOP 
+        dbms_output.put_line(v_specializations(i));
+    END LOOP;
+
+EXCEPTION
+    WHEN v_exception THEN
+        raise_application_error(-20000, 'Nu exista asemenea specializari');
+    WHEN OTHERS THEN
+        raise_application_error(-20002, 'Alta eroare!');
+END;
+
+SET SERVEROUTPUT ON;
+
+BEGIN
+    specializations_price(200, 250);  
+END;
+
+BEGIN
+    specializations_price(0, 30);--eroare
+END;
+
+--ex 7
+--obtineti toate progmarile dintr-o anumita luna
+
+CREATE OR REPLACE PROCEDURE consultations (
+    v_month NUMBER
+) IS
+
+    CURSOR consult IS
+    SELECT
+        consultation_id,
+        doctor_id,
+        patient_id,
+        clinic_id,
+        diagnostic_id,
+        consultation_date
+    FROM consultation
+    WHERE v_month = EXTRACT(MONTH FROM consultation_date)
+    ORDER BY consultation_date;
+
+    v_exception1 EXCEPTION;
+    v_exception2 EXCEPTION;
+    v_nr INT := 0;
+    
+BEGIN
+
+    IF v_month <= 0 OR v_month > 12 THEN
+        RAISE v_exception1;
+    ELSE
+        FOR i IN consult LOOP
+            v_nr := v_nr + 1;
+            dbms_output.put_line('Consultatia nr ' || i.consultation_id);
+            dbms_output.put_line('Doctor: ' || i.doctor_id);
+            dbms_output.put_line('Patient: ' || i.patient_id);
+            dbms_output.put_line('Clinic: ' || i.clinic_id);
+            dbms_output.put_line('Diagnostic: ' || i.diagnostic_id);
+            dbms_output.put_line('Date: ' || i.consultation_date);
+            dbms_output.new_line();
+        END LOOP;
+    END IF;
+
+    IF v_nr = 0 THEN
+        RAISE v_exception2;
+    END IF;
+    
+EXCEPTION
+    WHEN v_exception2 THEN
+        raise_application_error(-20000, 'Nu exista consultatii in luna respectiva');
+    WHEN v_exception1 THEN
+        raise_application_error(-20000, 'Luna ' || v_month || ' nu este valida');
+
+    WHEN OTHERS THEN
+        raise_application_error(-20002, 'Alta eroare!');
+END;
+
+BEGIN
+    consultations(4);
+END;
+
+BEGIN
+    consultations(0); --eroare
+END;
+BEGIN
+    consultations(11); --eroare
+END;
+
+-- ex 8
+--returnati nr pacintilor diagnosticati cu un diagnostic dat ca parametru si au peste x ani
+
+CREATE OR REPLACE FUNCTION patients (
+    v_name   diagnostic.name%TYPE,
+    v_age    patient.age%TYPE
+) 
+ RETURN NUMBER IS
+    nr NUMBER;
+    v_exception1 EXCEPTION;
+    v_exception2 EXCEPTION;
+    
+BEGIN
+    SELECT COUNT(p.patient_id)
+    INTO nr
+    FROM
+        diagnostic     d,
+        patient        p,
+        consultation   c
+    WHERE
+        p.patient_id = c.patient_id
+        AND c.diagnostic_id = d.diagnostic_id
+        AND p.age >= v_age
+        AND d.name = v_name;
+
+    IF v_age <= 0 THEN
+        RAISE v_exception1;
+    END IF;
+    
+    IF nr = 0 THEN
+        RAISE v_exception2;
+    END IF;
+    
+    RETURN nr;
+    
+EXCEPTION
+    WHEN v_exception2 THEN
+        raise_application_error(-20000, 'Nu exista pacienti cu aceste date');
+    WHEN v_exception1 THEN
+        raise_application_error(-20000, 'Varsta nu poate fi negativa');
+    WHEN OTHERS THEN
+        raise_application_error(-20002, 'Alta eroare!');
+END patients;
+
+BEGIN
+    dbms_output.put_line('Numarul pacientilor este ' || patients('Hipertensiune', 15));
+END;
+
+BEGIN
+    dbms_output.put_line('Numarul pacientilor este ' || patients('Hipertensiune', -15));
+END;
+
+BEGIN
+    dbms_output.put_line('Numarul pacientilor este ' || patients('Hipertensiune', 101));
+END;
+/
+
+--ex 9
+--Afisati specializarile unei clinici cu un nume dat
+
+CREATE OR REPLACE PROCEDURE specializations_clinic (
+    v_name clinic.name%TYPE
+) IS
+
+    TYPE index_table IS
+        TABLE OF VARCHAR2(40) INDEX BY PLS_INTEGER;
+    specializations   index_table;
+    v_exception       EXCEPTION;
+    v_nr              INT := 0;
+    v_nume            clinic.name%TYPE;
+BEGIN
+    SELECT name
+    INTO v_nume
+    FROM clinic
+    WHERE name = v_name;
+
+    SELECT s.name
+    BULK COLLECT
+    INTO specializations
+    FROM
+        clinic               c,
+        works_on             wc,
+        doctor               d,
+        has_specialization   hs,
+        specialization       s
+    WHERE
+        c.name = v_name
+        AND c.clinic_id = wc.clinic_id
+        AND wc.doctor_id = d.doctor_id
+        AND d.doctor_id = hs.doctor_id
+        AND hs.specialization_id = s.specialization_id;
+
+    IF specializations.count = 0 THEN
+        RAISE v_exception;
+    END IF;
+    
+    dbms_output.put_line('Clinica ' || v_name);
+    dbms_output.new_line();
+    
+    FOR i IN specializations.first..specializations.last LOOP 
+        dbms_output.put_line(specializations(i));
+    END LOOP;
+
+    dbms_output.new_line();
+EXCEPTION
+    WHEN v_exception THEN
+        raise_application_error(-20000, 'Nu exista specializari la clinica respectiva');
+    WHEN too_many_rows THEN
+        raise_application_error(-20000, 'Exista mai multe clinici cu acest nume');
+    WHEN OTHERS THEN
+        raise_application_error(-20002, 'Alta eroare!');
+END;
+
+SET SERVEROUTPUT ON;
+
+BEGIN
+    specializations_clinic('Medlife');
+END;
+BEGIN
+    specializations_clinic('Uni Clinic');
+END;
+BEGIN
+    specializations_clinic('Clinica');
+END;
+
+--ex 10
+--nu pot fi adaugate consultatii duminica, sambata si nici in rstul zileleor intre orele 20 si 8
+
+CREATE OR REPLACE TRIGGER trig1 BEFORE
+    INSERT OR UPDATE OR DELETE ON consultation
+BEGIN
+    IF ( to_char(sysdate, 'D') = 1) OR ( to_char(sysdate, 'D') = 7 ) OR ( to_char(sysdate, 'HH24') NOT BETWEEN 8 AND 20 ) THEN
+        IF inserting THEN
+            raise_application_error(-20001, 'Inserarea in tabel este permisa doar in timpul programului de lucru!');
+        ELSIF deleting THEN
+            raise_application_error(-20002, 'Stergerea din tabel este permisa doar in timpul programului de lucru!');
+        ELSE
+            raise_application_error(-20003, 'Actualizarile in tabel sunt permise doar in timpul programului de lucru!');
+        END IF;
+
+    END IF;
+END;
+/
+
+DELETE consultation
+WHERE
+    clinic_id = 2;
+
+--ex 11
+--nu poate fi modificata data consultatiei cu o data mai mare decat cea actuala
+
+CREATE OR REPLACE TRIGGER trig2 BEFORE
+    UPDATE OF consultation_date ON consultation
+    FOR EACH ROW
+    WHEN ( new.consultation_date > sysdate )
+BEGIN
+    raise_application_error(-20002, 'Data nu poate fi modificata');
+END;
+/
+
+UPDATE consultation
+SET consultation_date = '02/21/2020 12:20:00'
+WHERE consultation_id = 1;
+
+UPDATE consultation
+SET consultation_date = '02/21/2021 12:20:00'
+WHERE consultation_id = 1;
+
+--ex 12
+--nu se poti sterge sau modifica tabele
+CREATE OR REPLACE TRIGGER trig3 AFTER DROP OR ALTER ON SCHEMA BEGIN
+    raise_application_error(-20002, 'Nu poti sterge sau modifica tabelele');
+    ROLLBACK;
+END;
+
+DROP TABLE has_specialization;
+
+--ex 13
+
+CREATE OR REPLACE PACKAGE pachet AS
+    PROCEDURE specializations_price (
+        x   NUMBER,
+        y   NUMBER
+    );
+
+    PROCEDURE consultations (
+        v_month NUMBER
+    );
+
+    FUNCTION patients (
+        v_name   diagnostic.name%TYPE,
+        v_age    patient.age%TYPE
+    ) RETURN NUMBER;
+
+    PROCEDURE specializations_clinic (
+        v_name clinic.name%TYPE
+    );
+
+END pachet;
+
+CREATE OR REPLACE PACKAGE BODY pachet AS
+
+    PROCEDURE specializations_price (
+        x   NUMBER,
+        y   NUMBER
+    ) IS
+        TYPE index_table IS
+            TABLE OF VARCHAR2(40) INDEX BY PLS_INTEGER;
+        v_specializations index_table;
+        v_exception EXCEPTION;
+    BEGIN
+    
+        SELECT name
+        BULK COLLECT
+        INTO v_specializations
+        FROM specialization
+        WHERE price <= y AND price >= x;
+
+        IF v_specializations.count = 0 THEN
+            RAISE v_exception;
+        END IF;
+        dbms_output.put_line('Specializarile sunt:');
+
+        FOR i IN v_specializations.first..v_specializations.last LOOP 
+            dbms_output.put_line(v_specializations(i));
+        END LOOP;
+
+    EXCEPTION
+        WHEN v_exception THEN
+            raise_application_error(-20000, 'Nu exista asemenea specializari');
+        WHEN OTHERS THEN
+            raise_application_error(-20002, 'Alta eroare!');
+    END;
+
+    PROCEDURE consultations (
+        v_month NUMBER
+    ) IS
+
+        CURSOR consult IS
+        SELECT
+            consultation_id,
+            doctor_id,
+            patient_id,
+            clinic_id,
+            diagnostic_id,
+            consultation_date
+        FROM consultation
+        WHERE v_month = EXTRACT(MONTH FROM consultation_date)
+        ORDER BY consultation_date;
+
+        v_exception1 EXCEPTION;
+        v_exception2 EXCEPTION;
+        v_nr INT := 0;
+        
+    BEGIN
+        IF v_month <= 0 OR v_month > 12 THEN
+            RAISE v_exception1;
+        ELSE
+            FOR i IN consult LOOP
+                v_nr := v_nr + 1;
+                dbms_output.put_line('Consultatia nr ' || i.consultation_id);
+                dbms_output.put_line('Doctor: ' || i.doctor_id);
+                dbms_output.put_line('Patient: ' || i.patient_id);
+                dbms_output.put_line('Clinic: ' || i.clinic_id);
+                dbms_output.put_line('Diagnostic: ' || i.diagnostic_id);
+                dbms_output.put_line('Date: ' || i.consultation_date);
+                dbms_output.new_line();
+            END LOOP;
+        END IF;
+
+        IF v_nr = 0 THEN
+            RAISE v_exception2;
+        END IF;
+        
+    EXCEPTION
+        WHEN v_exception2 THEN
+            raise_application_error(-20000, 'Nu exista consultatii in luna respectiva');
+        WHEN v_exception1 THEN
+                   raise_application_error(-20000, 'Luna ' || v_month || ' nu este valida');
+        WHEN OTHERS THEN
+            raise_application_error(-20002, 'Alta eroare!');
+    END;
+
+    FUNCTION patients (
+        v_name   diagnostic.name%TYPE,
+        v_age    patient.age%TYPE
+    ) RETURN NUMBER IS
+        nr NUMBER;
+        v_exception1 EXCEPTION;
+        v_exception2 EXCEPTION;
+    BEGIN
+        SELECT COUNT(p.patient_id)
+        INTO nr
+        FROM
+            diagnostic     d,
+            patient        p,
+            consultation   c
+        WHERE
+            p.patient_id = c.patient_id
+            AND c.diagnostic_id = d.diagnostic_id
+            AND p.age >= v_age
+            AND d.name = v_name;
+
+        IF v_age <= 0 THEN
+            RAISE v_exception1;
+        END IF;
+        
+        IF nr = 0 THEN
+            RAISE v_exception2;
+        END IF;
+        
+        RETURN nr;
+        
+    EXCEPTION
+        WHEN v_exception2 THEN
+            raise_application_error(-20000, 'Nu exista pacienti cu aceste date');
+        WHEN v_exception1 THEN
+            raise_application_error(-20000, 'Varsta nu poate fi negativa');
+        WHEN OTHERS THEN
+            raise_application_error(-20002, 'Alta eroare!');
+    END patients;
+
+    PROCEDURE specializations_clinic (
+        v_name clinic.name%TYPE
+    ) IS
+
+        TYPE index_table IS
+            TABLE OF VARCHAR2(40) INDEX BY PLS_INTEGER;
+        specializations   index_table;
+        v_exception EXCEPTION;
+        v_nr              INT := 0;
+        v_nume            clinic.name%TYPE;
+    BEGIN
+    
+        SELECT name
+        INTO v_nume
+        FROM clinic
+        WHERE name = v_name;
+
+        SELECT s.name
+        BULK COLLECT
+        INTO specializations
+        FROM
+            clinic               c,
+            works_on             wc,
+            doctor               d,
+            has_specialization   hs,
+            specialization       s
+        WHERE
+            c.name = v_name
+            AND c.clinic_id = wc.clinic_id
+            AND wc.doctor_id = d.doctor_id
+            AND d.doctor_id = hs.doctor_id
+            AND hs.specialization_id = s.specialization_id;
+
+        IF specializations.count = 0 THEN
+            RAISE v_exception;
+        END IF;
+        
+        dbms_output.put_line('Clinica ' || v_name);
+        dbms_output.new_line();
+        
+        FOR i IN specializations.first..specializations.last LOOP 
+            dbms_output.put_line(specializations(i));
+        END LOOP;
+
+        dbms_output.new_line();
+        
+    EXCEPTION
+        WHEN v_exception THEN
+            raise_application_error(-20000, 'Nu exista specializari la clinica respectiva');
+        WHEN too_many_rows THEN
+            raise_application_error(-20000, 'Exista mai multe clinici cu acest nume');
+        WHEN OTHERS THEN
+            raise_application_error(-20002, 'Alta eroare!');
+    END;
+
+END pachet;
+
+SET SERVEROUTPUT ON;
+
+BEGIN
+    pachet.specializations_price(200, 250);
+    dbms_output.new_line();
+    
+    pachet.consultations(3);
+    dbms_output.new_line();
+    
+    dbms_output.put_line('Numarul pacientilor este ' || pachet.patients('Hipertensiune', 15));
+    dbms_output.new_line();
+    
+    pachet.specializations_clinic('Medlife');
+END;
+ 
+ 
+
+
+
+     
